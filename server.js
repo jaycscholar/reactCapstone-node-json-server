@@ -1,10 +1,15 @@
-// server.js (or api/index.js)
-    const jsonServer = require('json-server');
-    const server = jsonServer.create();
-    const router = jsonServer.router('employees.json'); // Path to your JSON data
-    const middlewares = jsonServer.defaults();
+// server.js
+const jsonServer = require('json-server');
+const path = require('path');
 
-    server.use(middlewares);
-    server.use(router);
+const server = jsonServer.create();
+const router = jsonServer.router(path.join(__dirname, 'employees.json'));
+const middlewares = jsonServer.defaults();
 
-    module.exports = server; // Export the server for Vercel
+server.use(middlewares);
+server.use(router);
+
+// Export as Vercel serverless function
+module.exports = (req, res) => {
+    server(req, res);
+};
